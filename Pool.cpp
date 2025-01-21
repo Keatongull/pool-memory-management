@@ -1,8 +1,6 @@
 //Pool.cpp
 #include "Pool.h"
-//#include <string>
 #include <cstring>
-//#include <iostream>
 #include <cstddef>
 #include <cassert>
 #include <iostream>
@@ -22,17 +20,17 @@ void Pool::grow(){
     }
     
     new (P+elemSize_ * (blockSize_-1)) char*(nullptr);
-    freeptr = pool[numRows];//P
+    freeptr = pool[numRows];
     numRows++;
     freeCells+= blockSize_;
 }
 Pool::Pool(size_t elemSize, size_t blockSize){
-      assert(sizeof(elemSize)>=sizeof(char*));
-      cout<<"Initializing a pool with element size "<< elemSize <<" and block size "<< blockSize<<endl<<endl;
-      numRows = 0;
-      blockSize_ = blockSize;
-      elemSize_ = elemSize;
-      freeptr=nullptr;
+    assert(sizeof(elemSize)>=sizeof(char*));
+    cout<<"Initializing a pool with element size "<< elemSize <<" and block size "<< blockSize<<endl<<endl;
+    numRows = 0;
+    blockSize_ = blockSize;
+    elemSize_ = elemSize;
+    freeptr=nullptr;
     } 
 Pool::~Pool(){
     for(size_t i{0}; i<numRows; i++){
@@ -57,7 +55,6 @@ void Pool::deallocate(void* ptr){
     cout<<"Cell deallocated at "<< ptr <<endl;
     new (ptr) char*(freeptr);
     freeptr = reinterpret_cast<char*>(ptr);
-    //cout<<"test free " <<&freeptr<<endl;
     freeCells++;
     liveCells--;
 }
@@ -69,6 +66,5 @@ void Pool::profile() const{
     while(freeptr_temp!=nullptr){
         cout<<freeptr_temp<<endl;
         freeptr_temp= *reinterpret_cast<char**>(freeptr_temp);
-        // cout<<"test free " <<freeptr_temp<<endl;
     }
 }

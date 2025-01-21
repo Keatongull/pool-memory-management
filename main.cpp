@@ -4,8 +4,6 @@
 #include "MyObject.h"
 using namespace std;
 
-// The following function template converts an object of
-// any type that supports operator << to a string
 template<typename T>
 string toString(const T& t)
 {
@@ -16,7 +14,6 @@ string toString(const T& t)
 
 int main()
 {
-   // Create an array of MyObject heap objects
     const size_t MAXOBJS = 20;
     MyObject* objs[MAXOBJS];
 
@@ -35,7 +32,6 @@ int main()
     MyObject* yetAnotherObject = MyObject::create(120, "yetAnotherObject");
    cout << "yetAnotherObject == " << *yetAnotherObject << endl;
 
-   // Delete everything
     delete anotherObject;
     delete yetAnotherObject;
     for (unsigned int i = 0; i < MAXOBJS; ++i)
