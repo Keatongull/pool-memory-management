@@ -21,15 +21,10 @@ public:
     static void operator delete(void*);
     static MyObject* create(int id, const std::string& name) { // Factory method      
     return new MyObject(id, name);
-   }
+    }
     static void profile();
     friend std::ostream& operator<<(std::ostream& os, const MyObject& obj);
     
 };
 
 #endif
-
-//The overall project was good. Learning new things with C++ is great. 
-//I was struggling on this one though quite a bit. Working with low level 
-//programs is fun and interesting. I learned some new features about C++ 
-//including the Placement new and reinterpt cast.
