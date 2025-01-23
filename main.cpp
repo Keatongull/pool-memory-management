@@ -2,40 +2,37 @@
 #include <string>
 #include <sstream>
 #include "MyObject.h"
-using namespace std;
 
-template<typename T>
-string toString(const T& t)
-{
-    ostringstream os;
-    os << t;
+std::string toString(int i) {
+    std::ostringstream os;
+    os << i;
     return os.str();
 }
 
-int main()
-{
+int main() {
     const size_t MAXOBJS = 20;
     MyObject* objs[MAXOBJS];
 
     for (unsigned int i = 0; i < MAXOBJS; ++i)
         objs[i] = MyObject::create(i, "\"" + toString(i) + "\"");
-    cout << "Object 5 == " << *objs[5] << endl;
+    std::cout << "Object 5 == " << *objs[5] << std::endl;
     delete objs[5];
-    objs[5] = 0;
+    objs[5] = nullptr;
     MyObject::profile();
 
-    cout << "Creating another object:\n";
+    std::cout << "Creating another object:\n";
     MyObject* anotherObject = MyObject::create(100, "anotherObject");
-   cout << "anotherObject == " << *anotherObject << endl;
+    std::cout << "anotherObject == " << *anotherObject << std::endl;
 
-    cout << "Creating yet another object:\n";
+    std::cout << "Creating yet another object:\n";
     MyObject* yetAnotherObject = MyObject::create(120, "yetAnotherObject");
-   cout << "yetAnotherObject == " << *yetAnotherObject << endl;
+    std::cout << "yetAnotherObject == " << *yetAnotherObject << std::endl;
 
     delete anotherObject;
     delete yetAnotherObject;
     for (unsigned int i = 0; i < MAXOBJS; ++i)
         delete objs[i];
     MyObject::profile();
-}
 
+    return 0;
+}

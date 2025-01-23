@@ -13,17 +13,18 @@ void Pool::grow(){
     delete[] pool;
     pool= tempPool;
     pool[numRows] = new char [blockSize_ * elemSize_];
-    char* P =pool[numRows];
+    Element* P = reinterpret_cast<Element*>(pool[numRows]);
     
     for(size_t i{0}; i<blockSize_-1; i++){
-        new (P+elemSize_ * i) char*(P + elemSize_* (i+1));
+        P[i].next = reinterpret_cast<char*>(&P[i+1]);
     }
     
-    new (P+elemSize_ * (blockSize_-1)) char*(nullptr);
-    freeptr = pool[numRows];
+    P[blockSize_-1].next = nullptr;
+    freeptr = reinterpret_cast<char*>(P);
     numRows++;
     freeCells+= blockSize_;
 }
+
 Pool::Pool(size_t elemSize, size_t blockSize){
     assert(sizeof(elemSize)>=sizeof(char*));
     cout<<"Initializing a pool with element size "<< elemSize <<" and block size "<< blockSize<<endl<<endl;
@@ -31,13 +32,18 @@ Pool::Pool(size_t elemSize, size_t blockSize){
     blockSize_ = blockSize;
     elemSize_ = elemSize;
     freeptr=nullptr;
-    } 
+    pool = nullptr;
+    freeCells = 0;
+    liveCells = 0; // Initialize liveCells
+}
+
 Pool::~Pool(){
     for(size_t i{0}; i<numRows; i++){
-        delete pool[i];
+        delete[] pool[i];
     }
     delete[] pool;
 }
+
 void* Pool::allocate(){
     if (freeptr== nullptr)
         grow();
@@ -58,8 +64,8 @@ void Pool::deallocate(void* ptr){
     freeCells++;
     liveCells--;
 }
+
 void Pool::profile() const{
-    
     cout<<"Live cells: "<< liveCells<<" ,Free Cells: "<<freeCells <<endl;
     cout<<"Free list: \n"<<std::endl;
     void* freeptr_temp = freeptr;
